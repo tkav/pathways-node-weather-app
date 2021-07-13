@@ -21,8 +21,8 @@ This GitHub template should be used to create your own repository. Repository wi
 * Update the `key` value in the `meta.tf` file replacing `<username>` with your username for the name of the Terraform state file.
 * Update the default bucket name in the `variable.tf` file to a something globally unique.
 * Create GitHub Secrets in your repository for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` if using temporary credentials.
-* Push local changes to the GitHub repos master branch, which should trigger the Github deploy workflow, and deploy the s3 bucket.
-* Create a pull request to merge master chnages to destroy branch. Mrge chnages to trigger the Github destroy workflow deleting the s3 bucket.
+* Push local changes to the GitHub repos master branch, which should trigger the Github deploy workflow, and deploy the s3 bucket. Remember to review tf plan and approve apply.
+* Create a pull request to merge master changes to destroy branch. Merge changes to trigger the Github destroy workflow deleting the s3 bucket. Remember to review the tf speculative plan and approve destroy.
 
 
 Keep reading for in-depth details.
