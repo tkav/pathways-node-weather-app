@@ -16,7 +16,7 @@ It includes and supports the following functionality:
 ## Getting Started
 This GitHub template should be used to create your own repository. Repository will need to be public if you are creating a personal GitHub account in order to support approval gates in GitHub actions. Configure the following to get started:
 * Clone your repository locally. It should have a branch named `master`.
-* Create a `destroy` branch in your GitHiub repo. This will be used to trigger Terraform Destroy workflow during pull request from `master->destroy`.
+* Create a `destroy` branch in your GitHuib repo. This will be used to trigger Terraform Destroy workflow during pull request from `master->destroy`.
 * Create an environment in your repository named `approval` to support GitHub Workflows, selecting `required reviewers` and adding yourself as an approver.
 * Update the `key` value in the `meta.tf` file replacing `<username>` with your username for the name of the Terraform state file.
 * Update the default bucket name in the `variable.tf` file to a something globally unique.
