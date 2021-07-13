@@ -7,9 +7,9 @@ on:
       - 'docker-compose.yml'
       - 'Makefile'
       - '.github/workflows/**'
-      - 'dockerfile'
+      - '*dockerfile'
       - 'modules/**'
-      - 'main.tf'
+      - '**.tf'
 
 jobs:
   terraform_destroy_plan:
