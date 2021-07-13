@@ -7,17 +7,17 @@ This repository is used in conjunction with the Contino Infra Engineer to Cloud 
 It includes and supports the following functionality:
 * Dockerfile and docker compose configuration for 3M based deployments
 * Makefile providing basic Terraform deployment functionality
-* GitHub workflows for supporting basic terraform deploy and destroy functionality
+* GitHub workflows for supporting basic Terraform deploy and destroy functionality
 * Terraform IaC for the test deployment of an s3 bucket
 * Node Weather App
 
 <br> 
 
 ## Getting Started
-This GitHub template should be used to create your own repository. In order to enable environments which are required for CI/CD workflows, you will need to create a public repository. Configure the following to get started:
-* Clone your repository locally. It shoyld have a branch named `master`.
+This GitHub template should be used to create your own repository. Repository will need to be public if you are creating a personal GitHub account in order to support approval gates in GitHub actions. Configure the following to get started:
+* Clone your repository locally. It should have a branch named `master`.
 * Create a `destroy` branch in your GitHiub repo. This will be used to trigger Terraform Destroy workflow during pull request from `master->destroy`.
-* Create an environment in your repository named `approval` to support GitHub Workflows, selecting `requires approval`.
+* Create an environment in your repository named `approval` to support GitHub Workflows, selecting `required reviewers` and adding yourself as an approver.
 * Update the `key` value in the `meta.tf` file replacing `<username>` with your username for the name of the Terraform state file.
 * Update the default bucket name in the `variable.tf` file to a something globally unique.
 * Create GitHub Secrets in your repository for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` if using temporary credentials.
@@ -28,7 +28,7 @@ Keep reading for in-depth details.
 
 ## 3 Musketeers
 
-The provided `makefile`, `dockerfile` , and `docker-compose.yml` files work together to create a docker container which is used to run terraform deployments and other supported commands. It expects AWS account credentials to be passed as environment variables.
+The provided `makefile`, `dockerfile` , and `docker-compose.yml` files work together to create a docker container which is used to run Terraform deployments and other supported commands. It expects AWS account credentials to be passed as environment variables.
 
 To run a simple aws command, ensure you have set your aws temporary credentials in your local environment and run the following
 
@@ -49,7 +49,7 @@ Destroying Terraform environment locally. Destroy plan is speculative. Destroy a
 make run_destroy_plan
 make run_destroy_apply
 ```
-Terraform `init`, `validate` and `fmt` are run for each of the above commands.
+Terraform `init`, `validate` and `fmt` are run for each of the `make` commands above.
 
 For more information on 3 Musketeers deployment method, visit the official site here. https://3musketeers.io/
 
@@ -63,9 +63,9 @@ The following workflows are provided in this repository. These are located under
 | main.yml | Two step workflow to run a Terraform Plan, and Terraform Apply following manual approvals. | approval | on.push.branch [master] ||
 | destroy.yml | Two step workflow to run a speculative Terraform Destroy Plan, and Terraform Destroy following manual approvals. | approval | on.push.branch [destroy] ||
 
-Note: Pushing to `master` branch will trigger terraform deploy. You will also need to create a branch named `destroy` in your GitHub repo. Not required locally and only used for pull requests `master -> destroy` to trigger TF destroy workflow.
+Note: Pushing to `master` branch will trigger Terraform (TF) deploy. You will also need to create a branch named `destroy` in your GitHub repository. Not required locally and only used for pull requests `master -> destroy` to trigger TF destroy workflow.
 
-Additionally, ONLY changes to the following file and file paths will trigger a workflow.
+Additionally, ONLY changes to the following files and paths will trigger a workflow.
 
 ```
     paths:
@@ -89,7 +89,7 @@ Additionally, ONLY changes to the following file and file paths will trigger a w
 
 <br>
 
-Create an environment in your repository named `approval` to support GitHub Workflows, selecting `requires approval`.
+Create an environment in your repository named `approval` to support GitHub Workflows, selecting `required reviewers` adding yourself as an approver.
 
 <br> 
 
@@ -98,7 +98,7 @@ Create an environment in your repository named `approval` to support GitHub Work
 <br> 
 
 ## GitHub Secrets
-Create GitHub Secrets in your repository for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` if using temporary credentials.
+Create GitHub Secrets in your repository for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` if using temporary credentials. ONLY `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` required if you have configured an IAM user with programmatic access.
 
 <br>
 
@@ -140,7 +140,7 @@ The `modules` folder allows you to organise your `.tf` files are called by `main
 <br>
 
 ### TF State Files
-AWS S3 is used to host the TF state files. This is hosted by s3://pathways-dojo. YOu will need to update the name of the state file in the `meta.tf` file to reflect your username.
+AWS S3 is used to host the TF state files. This is hosted by s3://pathways-dojo. You will need to update the name of the state file in the `meta.tf` file replacing `<username>` with your username.
 
 ```
 terraform {
@@ -156,6 +156,7 @@ terraform {
 ## Node Weather App
 
 The simple weather forecast application using Node.js.
+Link: https://github.com/phattp/nodejs-weather-app
 
 ### Getting Started
 
