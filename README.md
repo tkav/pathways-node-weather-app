@@ -2,27 +2,28 @@
 
 # Pathways Dojo Infra Node Weather App Quick Starter
 
-This repository is used in conjunction with the Contino Infra Engineer to Cloud Engineer Pathway course delivered in Contini-U
+This repository is used in conjunction with the Contino Infra Engineer to Cloud Engineer Pathway course delivered in Contini-U.
 
 It includes and supports the following functionality:
-* Dockerfile and docker compose configuration for 3M based deployments
+* Dockerfile and docker-compose configuration for 3M based deployments
 * Makefile providing basic Terraform deployment functionality
 * GitHub workflows for supporting basic Terraform deploy and destroy functionality
 * Terraform IaC for the test deployment of an s3 bucket
-* Node Weather App
+* Node Weather App - https://github.com/phattp/nodejs-weather-app
 
 <br> 
 
 ## Getting Started
-This GitHub template should be used to create your own repository. Repository will need to be public if you are creating a personal GitHub account in order to support approval gates in GitHub actions. Configure the following to get started:
+This GitHub template should be used to create your own repository. Repository will need to be public if you are creating it in your personal GitHub account in order to support approval gates in GitHub actions. Configure the following to get started:
 * Clone your repository locally. It should have a branch named `master`.
-* Create a `destroy` branch in your GitHuib repo. This will be used to trigger Terraform Destroy workflow during pull request from `master->destroy`.
+* Create a `destroy` branch in your GitHub repo. This will be used to trigger Terraform Destroy workflow during pull request from `master->destroy`.
 * Create an environment in your repository named `approval` to support GitHub Workflows, selecting `required reviewers` and adding yourself as an approver.
 * Update the `key` value in the `meta.tf` file replacing `<username>` with your username for the name of the Terraform state file.
 * Update the default bucket name in the `variable.tf` file to a something globally unique.
 * Create GitHub Secrets in your repository for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` if using temporary credentials.
 * Push local changes to the GitHub repos master branch, which should trigger the Github deploy workflow, and deploy the s3 bucket. Remember to review tf plan and approve apply.
 * Create a pull request to merge master changes to destroy branch. Merge changes to trigger the Github destroy workflow deleting the s3 bucket. Remember to review the tf speculative plan and approve destroy.
+* You can list s3 bucket in the APAC Dev account by running `make list_bucket` locally within the repo clone, to check bucket creation and removal.
 
 
 Keep reading for in-depth details.
@@ -63,8 +64,8 @@ The following workflows are provided in this repository. These are located under
 
 | Workflow | Description | Environments | Trigger
 |----------|-------------|--------------|--------|
-| main.yml | Two step workflow to run a Terraform Plan, and Terraform Apply following manual approvals. | approval | on.push.branch [master] ||
-| destroy.yml | Two step workflow to run a speculative Terraform Destroy Plan, and Terraform Destroy following manual approvals. | approval | on.push.branch [destroy] ||
+| main.yml | Two step workflow to run a Terraform Plan and Terraform Apply following manual approvals. | approval | on.push.branch [master] ||
+| destroy.yml | Two step workflow to run a speculative Terraform Destroy Plan and Terraform Destroy following manual approvals. | approval | on.push.branch [destroy] ||
 
 Note: Pushing to `master` branch will trigger Terraform (TF) deploy. You will also need to create a branch named `destroy` in your GitHub repository. Not required locally and only used for pull requests `master -> destroy` to trigger TF destroy workflow.
 
@@ -75,9 +76,9 @@ Additionally, ONLY changes to the following files and paths will trigger a workf
       - 'docker-compose.yml'
       - 'Makefile'
       - '.github/workflows/**'
-      - 'dockerfile'
+      - '*dockerfile'
       - 'modules/**'
-      - 'main.tf'
+      - '**.tf'
 ```
 
 <br>
@@ -118,7 +119,7 @@ The `modules` folder allows you to organise your `.tf` files are called by `main
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| bucket | s3 bucket name - must be globally unique | string | my-tf-test-bucket7717 | yes |
+| bucket | S3 bucket name - must be globally unique | string | my-tf-test-bucket7717 | yes |
 | tags | Tags to be applied to AWS resources| map(string) | `null` | no |
 
 
