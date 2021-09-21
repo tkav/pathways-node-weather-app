@@ -1,7 +1,7 @@
 variable "bucket" {
   type        = string
   description = "Specifies the name of an S3 Bucket"
-  default     = "my-tf-test-bucket7717"
+  default     = "tkav-pathways-dojo"
 }
 
 variable "tags" {
