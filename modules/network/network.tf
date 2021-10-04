@@ -96,6 +96,14 @@ data "aws_subnet_ids" "public" {
   }
 }
 
+data "aws_subnet_ids" "private" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "${var.project_prefix}-private-%"
+  }
+}
+
 resource "aws_eip" "vpc_eip" {
   vpc    = true
   count  = var.public_subnet_count
@@ -127,4 +135,63 @@ resource "aws_nat_gateway" "natgw" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id        = aws_vpc.vpc.id
   service_name  = "com.amazonaws.${var.aws_region}.s3"
+}
+
+resource "aws_route_table" "public" {
+  count         = var.public_subnet_count
+  vpc_id        = aws_vpc.vpc.id
+
+  depends_on = [aws_internet_gateway.gw]
+
+  tags = {
+    Name = "${var.project_prefix}-public-${count.index}"
+  }
+}
+
+data "aws_route_table" "public" {
+  tags = {
+    Name = "${var.project_prefix}-public-%"
+  }
+}
+resource "aws_route" "public_routes" {
+  count                     = var.public_subnet_count
+  route_table_id            = data.aws_route_table.public.id[count.index]
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id                = aws_internet_gateway.gw.id
+}
+
+resource "aws_route_table_association" "public" {
+  count          = var.public_subnet_count
+  subnet_id      = data.aws_subnet_ids.public.ids[count.index]
+  route_table_id = data.aws_route_table.public.id[count.index]
+}
+
+resource "aws_route_table" "private" {
+  count         = var.public_subnet_count
+  vpc_id        = aws_vpc.vpc.id
+
+  depends_on = [aws_nat_gateway.natgw]
+
+  tags = {
+    Name = "${var.project_prefix}-private-${count.index}"
+  }
+}
+
+data "aws_route_table" "private" {
+  tags = {
+    Name = "${var.project_prefix}-private-%"
+  }
+}
+
+resource "aws_route" "private_routes" {
+  count                     = var.private_subnet_count
+  route_table_id            = data.aws_route_table.private.id[count.index]
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id                = aws_nat_gateway.natgw[count.index].id
+}
+
+resource "aws_route_table_association" "private" {
+  count          = var.private_subnet_count
+  subnet_id      = data.aws_subnet_ids.private.ids[count.index]
+  route_table_id = data.aws_route_table.private.id[count.index]
 }
