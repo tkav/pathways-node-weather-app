@@ -21,10 +21,15 @@ jobs:
       AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
       AWS_ACCOUNT_NUMBER:  ${{ secrets.AWS_ACCOUNT_NUMBER }} 
       REGION:  ${{ secrets.REGION }} 
-      REPO_PARAMETER_NAME:  ${{ secrets.REPO_PARAMETER_NAME }}    
+      REPO_PARAMETER_NAME:  ${{ secrets.REPO_PARAMETER_NAME }}   
+      SLACK_WEBHOOK:  ${{ secrets.SLACK_WEBHOOK }}  
     steps:
     - uses: actions/checkout@v2
+    - name: Notify_Slack
+      run: ./scripts/slack_notify.sh "Building weather app image"
     - name: Container_Build
       run: make build
     - name: Container_Push
       run: make push
+    - name: Notify_Slack
+      run: ./scripts/slack_notify.sh "Pushed image to ECR"
